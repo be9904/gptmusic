@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="user"/>
+        </trust-anchors>
+    </debug-overrides>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">mesoft.kr</domain>
+    </domain-config>
+</network-security-config>
+<!--code snippet from https://sailer.tistory.com/entry/No-Network-Security-Config-specified-using-platform-default-%EC%98%A4%EB%A5%98-%EB%B0%9C%EC%83%9D-->

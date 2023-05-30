@@ -1,13 +1,14 @@
-package edu.skku.cs.gptmusic
+package edu.skku.cs.gptmusic.home
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import edu.skku.cs.gptmusic.LoginActivity
+import edu.skku.cs.gptmusic.R
+import edu.skku.cs.gptmusic.settings.SettingsFragment
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +36,10 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.home->setFragment(fragment1)
-                R.id.gpt->setFragment(fragment2)
-                R.id.search->setFragment(fragment3)
-                R.id.settings->setFragment(fragment4)
+                R.id.home ->setFragment(fragment1)
+                R.id.gpt ->setFragment(fragment2)
+                R.id.search ->setFragment(fragment3)
+                R.id.settings ->setFragment(fragment4)
             }
             true
         }

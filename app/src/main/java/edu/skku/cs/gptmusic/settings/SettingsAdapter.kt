@@ -1,4 +1,4 @@
-package edu.skku.cs.gptmusic
+package edu.skku.cs.gptmusic.settings
 
 import android.content.Context
 import android.graphics.Color
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import edu.skku.cs.gptmusic.R
 
 class SettingsAdapter(
     val context: Context,

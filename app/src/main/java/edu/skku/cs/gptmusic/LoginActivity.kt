@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import edu.skku.cs.gptmusic.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -46,10 +47,18 @@ class LoginActivity : AppCompatActivity() {
             val email = editTextUsername.text.toString()
             val password = editTextPassword.text.toString()
 
-            if(email.isEmpty())
+            println("email: $email(${email.length}), password: $password(${password.length})")
+
+            if(email.isEmpty()){
                 Toast.makeText(applicationContext, "Enter Email", Toast.LENGTH_SHORT).show()
-            else if(password.isEmpty())
+                progressBar.visibility = View.GONE
+                return@setOnClickListener
+            }
+            else if(password.isEmpty()){
                 Toast.makeText(applicationContext, "Enter Password", Toast.LENGTH_SHORT).show()
+                progressBar.visibility = View.GONE
+                return@setOnClickListener
+            }
 
             // login, snippet from google firebase docs
             // https://firebase.google.com/docs/auth/android/password-auth

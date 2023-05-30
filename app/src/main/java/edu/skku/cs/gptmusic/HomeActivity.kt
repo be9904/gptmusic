@@ -26,9 +26,10 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.gpt->setFragment(fragment1)
-                R.id.settings2->setFragment(fragment2)
-                R.id.settings3->setFragment(fragment3)
+                R.id.home->setFragment(fragment1)
+                R.id.gpt->setFragment(fragment2)
+                R.id.search->setFragment(fragment3)
+                R.id.settings->setFragment(fragment3)
             }
             true
         }
@@ -41,7 +42,7 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
         else{
-            textLog.text = "${user.email}"
+            user.email?.let { fragment1.setUserInfo(it) }
         }
 
         logoutBtn.setOnClickListener {

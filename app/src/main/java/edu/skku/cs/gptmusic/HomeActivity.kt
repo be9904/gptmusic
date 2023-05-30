@@ -14,27 +14,8 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val mAuth = FirebaseAuth.getInstance()
-        val logoutBtn = findViewById<Button>(R.id.buttonLogout)
-        val textLog = findViewById<TextView>(R.id.textViewLog)
-
-        // fragments
-        val fragment1 = SettingsFragment()
-        val fragment2 = SettingsFragment()
-        val fragment3 = SettingsFragment()
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-
-        bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.home->setFragment(fragment1)
-                R.id.gpt->setFragment(fragment2)
-                R.id.search->setFragment(fragment3)
-                R.id.settings->setFragment(fragment3)
-            }
-            true
-        }
-
         // check login
+        val mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
         if(user == null){
             val loginIntent = Intent(this, LoginActivity::class.java)
@@ -42,14 +23,24 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
         else{
-            user.email?.let { fragment1.setUserInfo(it) }
+            println("login successful, entering home activity")
         }
 
-        logoutBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            val loginIntent = Intent(this, LoginActivity::class.java)
-            startActivity(loginIntent)
-            finish()
+        // fragments
+        val fragment1 = HomeFragment()
+        val fragment2 = HomeFragment()
+        val fragment3 = HomeFragment()
+        val fragment4 = SettingsFragment(user?.email.toString())
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.home->setFragment(fragment1)
+                R.id.gpt->setFragment(fragment2)
+                R.id.search->setFragment(fragment3)
+                R.id.settings->setFragment(fragment4)
+            }
+            true
         }
     }
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/settings2"
+        android:title="Home"
+        android:icon="@drawable/ic_settings_foreground"/>
+    <item
         android:id="@+id/gpt"
         android:title="GPT"
         android:icon="@mipmap/ic_gpt_foreground"/>
     <item
-        android:id="@+id/settings2"
-        android:title="Settings"
-        android:icon="@drawable/ic_settings_foreground"/>
+        android:id="@+id/search"
+        android:title="Search"
+        android:icon="@drawable/ic_search_foreground"/>
     <item
         android:id="@+id/settings3"
-        android:title="Settings"
-        android:icon="@drawable/ic_settings_foreground"/>
-    <item
-        android:id="@+id/settings4"
         android:title="Settings"
         android:icon="@drawable/ic_settings_foreground"/>
 </menu>

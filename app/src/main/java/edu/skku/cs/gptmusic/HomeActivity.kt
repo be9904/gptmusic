@@ -26,7 +26,7 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.settings->setFragment(fragment1)
+                R.id.gpt->setFragment(fragment1)
                 R.id.settings2->setFragment(fragment2)
                 R.id.settings3->setFragment(fragment3)
             }

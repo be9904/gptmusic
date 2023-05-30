@@ -11,7 +11,6 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import edu.skku.cs.gptmusic.home.HomeActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth

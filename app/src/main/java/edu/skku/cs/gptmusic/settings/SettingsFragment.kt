@@ -32,6 +32,7 @@ class SettingsFragment(
         userEmail.text = email
 
         // add settings fields
+        settingsFields.clear()
         settingsFields.add(SettingsField("Show API Key"))
         settingsFields.add(SettingsField("Logout"))
 

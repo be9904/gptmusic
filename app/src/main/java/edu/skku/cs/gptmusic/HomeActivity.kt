@@ -1,4 +1,4 @@
-package edu.skku.cs.gptmusic.home
+package edu.skku.cs.gptmusic
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,8 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import edu.skku.cs.gptmusic.LoginActivity
-import edu.skku.cs.gptmusic.R
+import edu.skku.cs.gptmusic.home.HomeFragment
 import edu.skku.cs.gptmusic.settings.SettingsFragment
 
 class HomeActivity : AppCompatActivity() {

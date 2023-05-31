@@ -42,6 +42,7 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
         val trackName = view.findViewById<TextView>(R.id.textViewTrack)
         val artistName = view.findViewById<TextView>(R.id.textViewArtist)
         val listeners = view.findViewById<TextView>(R.id.textViewListener)
+        val desc = view.findViewById<TextView>(R.id.textViewDesc)
         val playBtn = view.findViewById<Button>(R.id.playButton)
         val tagsLayout = view.findViewById<LinearLayout>(R.id.tagsLayout)
 
@@ -107,6 +108,7 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
                             .getNumberInstance(Locale.US)
                             .format(response.track?.listeners?.toInt())
                         listeners.text = "$formattedNumber listeners"
+                        desc.text = response.track?.wiki?.summary!!
 
                         // set tags
                         for(tag in response.track?.toptags?.tag!!) {

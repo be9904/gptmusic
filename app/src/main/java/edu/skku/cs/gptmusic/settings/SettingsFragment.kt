@@ -12,6 +12,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import edu.skku.cs.gptmusic.HomeActivity
 import edu.skku.cs.gptmusic.LoginActivity
 import edu.skku.cs.gptmusic.R
 import edu.skku.cs.gptmusic.api.APIHandler
@@ -19,7 +20,6 @@ import edu.skku.cs.gptmusic.api.APIHandler
 class SettingsFragment(
     val email: String
 ) : Fragment(R.layout.fragment_settings) {
-    val handler = APIHandler()
     var settingsFields = ArrayList<SettingsField>(0)
 
     override fun onCreateView(
@@ -34,7 +34,7 @@ class SettingsFragment(
         userEmail.text = email
 
         // fetch key
-        handler.fetchAPIKey(email)
+        HomeActivity.apiHandler.fetchAPIKey(email)
 
         // add settings fields
         settingsFields.clear()
@@ -73,10 +73,9 @@ class SettingsFragment(
         val dialogLayout = inflater.inflate(R.layout.dialog_showkey, null)
         val textView = dialogLayout.findViewById<TextView>(R.id.textViewAPIKey)
 
-
         with(builder) {
             setTitle("API Key")
-            textView.text = handler.apikey
+            textView.text = HomeActivity.apiHandler.apikey
             setPositiveButton("OK", null)
             setView(dialogLayout)
             show()

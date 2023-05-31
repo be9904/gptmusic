@@ -8,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import edu.skku.cs.gptmusic.api.APIHandler
 import edu.skku.cs.gptmusic.home.HomeFragment
+import edu.skku.cs.gptmusic.search.SearchFragment
 import edu.skku.cs.gptmusic.settings.SettingsFragment
 
 class HomeActivity : AppCompatActivity() {
@@ -37,7 +38,7 @@ class HomeActivity : AppCompatActivity() {
         // fragments
         val fragment1 = HomeFragment()
         val fragment2 = HomeFragment()
-        val fragment3 = HomeFragment()
+        val fragment3 = SearchFragment()
         val fragment4 = SettingsFragment()
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 

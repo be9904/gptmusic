@@ -17,13 +17,14 @@
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_marginHorizontal="16dp"
-            android:queryHint="Search..."
             android:iconifiedByDefault="false"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="16dp"
             android:layout_height="wrap_content"
             android:background="@drawable/searchview_background"
-            android:queryBackground="@android:color/transparent"/>
+            android:queryBackground="@android:color/transparent">
+
+        </SearchView>
 
         <ListView
             android:id="@+id/searchList"

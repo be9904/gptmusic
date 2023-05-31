@@ -1,13 +1,17 @@
 package edu.skku.cs.gptmusic.search
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -102,13 +106,30 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
                         }
 
                         // set info
-                        trackName.text = response.track?.name!!
-                        artistName.text = response.track?.artist?.name!!
+                        trackName.text = response.track?.name
+                        artistName.text = response.track?.artist?.name ?: "-"
                         val formattedNumber = NumberFormat
                             .getNumberInstance(Locale.US)
                             .format(response.track?.listeners?.toInt())
                         listeners.text = "$formattedNumber listeners"
-                        desc.text = response.track?.wiki?.summary!!
+                        val summary = response.track?.wiki?.summary
+                        if(summary != null){
+                            // Parse the html and create a spanned object
+                            val parsedHtml = HtmlCompat.fromHtml(summary, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+                            // Create a SpannableStringBuilder to combine the parsed HTML with non-hyperlink text
+                            val builder = SpannableStringBuilder()
+                            builder.append("\n\n")
+                            builder.append(parsedHtml)
+
+                            // Set the combined text in the TextView
+                            desc.text = builder
+
+                            // Enable clickable links in the TextView
+                            desc.movementMethod = LinkMovementMethod.getInstance()
+                        }
+                        else
+                            desc.text = "No Summary Available"
 
                         // set tags
                         for(tag in response.track?.toptags?.tag!!) {

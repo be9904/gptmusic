@@ -10,6 +10,7 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import edu.skku.cs.gptmusic.HomeActivity
 import edu.skku.cs.gptmusic.R
+import edu.skku.cs.gptmusic.api.Track
 
 class SearchFragment : Fragment(R.layout.fragment_search){
     override fun onCreateView(
@@ -51,7 +52,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                     return true
                 }
                 else{
-                    searchList.adapter = SearchAdapter(requireContext(), ArrayList<String>(0))
+                    searchList.adapter = SearchAdapter(requireContext(), listOf<Track>())
                     return true
                 }
                 return false

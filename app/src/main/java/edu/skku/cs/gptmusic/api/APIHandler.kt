@@ -86,13 +86,13 @@ class APIHandler {
 
                     val tracks = response.results.trackmatches.track
 
-                    // Access the track information
-                    for (track in tracks) {
-                        trackList.add("${track.name} - ${track.artist}")
-                        // println("Name: ${track.name} - Artist: ${track.artist}")
-                    }
+//                    // Access the track information
+//                    for (track in tracks) {
+//                        trackList.add("${track.name} - ${track.artist}")
+//                        // println("Name: ${track.name} - Artist: ${track.artist}")
+//                    }
                     CoroutineScope(Dispatchers.Main).launch {
-                        listView.adapter = SearchAdapter(context, trackList)
+                        listView.adapter = SearchAdapter(context, tracks)
                     }
                 }
             }

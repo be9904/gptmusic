@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import edu.skku.cs.gptmusic.R
+import edu.skku.cs.gptmusic.api.Track
+import java.text.NumberFormat
+import java.util.Locale
 
-class SearchAdapter(val context: Context, val searchedItems: ArrayList<String>): BaseAdapter() {
+class SearchAdapter(val context: Context, val searchedItems: List<Track>): BaseAdapter() {
     override fun getCount(): Int {
         return searchedItems.count()
     }
@@ -26,7 +29,13 @@ class SearchAdapter(val context: Context, val searchedItems: ArrayList<String>):
         val view = inflater.inflate(R.layout.item_search, null)
 
         val textView = view.findViewById<TextView>(R.id.searchItem)
-        textView.text = searchedItems[p0]
+        val textViewListener = view.findViewById<TextView>(R.id.textViewListeners)
+
+        textView.text = "${searchedItems[p0].name} - ${searchedItems[p0].artist}"
+        val formattedNumber = NumberFormat
+            .getNumberInstance(Locale.US)
+            .format(searchedItems[p0].listeners.toInt())
+        textViewListener.text = "$formattedNumber listeners"
 
         return view
     }

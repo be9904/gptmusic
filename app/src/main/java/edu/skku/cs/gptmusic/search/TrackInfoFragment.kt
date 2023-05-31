@@ -106,12 +106,16 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
                         }
 
                         // set info
-                        trackName.text = response.track?.name
+                        trackName.text = response.track?.name ?: "-"
                         artistName.text = response.track?.artist?.name ?: "-"
-                        val formattedNumber = NumberFormat
-                            .getNumberInstance(Locale.US)
-                            .format(response.track?.listeners?.toInt())
-                        listeners.text = "$formattedNumber listeners"
+                        if(response.track?.listeners != null){
+                            val formattedNumber = NumberFormat
+                                .getNumberInstance(Locale.US)
+                                .format(response.track?.listeners.toInt())
+                            listeners.text = "$formattedNumber listeners"
+                        }
+                        else
+                            listeners.text = ""
                         val summary = response.track?.wiki?.summary
                         if(summary != null){
                             // Parse the html and create a spanned object
@@ -132,10 +136,12 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
                             desc.text = "No Summary Available"
 
                         // set tags
-                        for(tag in response.track?.toptags?.tag!!) {
-                            val tagLayout = inflater.inflate(R.layout.item_tag, null)
-                            tagLayout.findViewById<TextView>(R.id.tag).text = tag.name
-                            tagsLayout.addView(tagLayout)
+                        if(response.track?.toptags?.tag != null){
+                            for(tag in response.track?.toptags?.tag) {
+                                val tagLayout = inflater.inflate(R.layout.item_tag, null)
+                                tagLayout.findViewById<TextView>(R.id.tag).text = tag.name
+                                tagsLayout.addView(tagLayout)
+                            }
                         }
                     }
                 }

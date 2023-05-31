@@ -47,7 +47,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                         parentFragmentManager,
                         searchList,
                         1,
-                        5,
+                        30,
                         p0
                     )
                     return true

@@ -53,6 +53,10 @@ class APIHandler {
         userDataRef.addValueEventListener(postListener)
     }
 
+    fun addTrack(){
+        
+    }
+
     // request track search to last.fm
     fun trackSearch(
         context: Context,

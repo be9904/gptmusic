@@ -1,5 +1,7 @@
 package edu.skku.cs.gptmusic.search
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
@@ -48,19 +50,23 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
         val listeners = view.findViewById<TextView>(R.id.textViewListener)
         val desc = view.findViewById<TextView>(R.id.textViewDesc)
         val playBtn = view.findViewById<Button>(R.id.playButton)
+        val addBtn = view.findViewById<Button>(R.id.addButton)
         val tagsLayout = view.findViewById<LinearLayout>(R.id.tagsLayout)
 
         // get youtube link
         CoroutineScope(Dispatchers.Default).launch {
-            // Fetch the HTML content of the Last.fm track page
+            // Fetch the html content of the Last.fm track page
             val doc: Document = Jsoup.connect(track.url).get()
 
-            // Find the element containing the YouTube link using a CSS selector
-            val element = doc.selectFirst("a.icon-youtube-play")
-
-            // Extract the href attribute value (YouTube link) from the element
-            val youtubeLink = element?.attr("href")
-            println("youtube: $youtubeLink")
+            // Extract the link from the html
+            val pattern = "data-youtube-url=\"(.*?)\"".toRegex()
+            val matchResult = pattern.find(doc.toString())
+            val youtubeLink = matchResult?.groupValues?.get(1)
+            playBtn.setOnClickListener{
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink))
+                val chooser = Intent.createChooser(intent, "Open with")
+                startActivity(chooser)
+            }
         }
 
         // init okhttp

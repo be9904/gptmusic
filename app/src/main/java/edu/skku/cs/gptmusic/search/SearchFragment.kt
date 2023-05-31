@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.RadioButton
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import edu.skku.cs.gptmusic.HomeActivity
@@ -30,6 +29,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                 {
                     HomeActivity.apiHandler.trackSearch(
                         requireContext(),
+                        parentFragmentManager,
                         searchList,
                         1,
                         30,
@@ -44,6 +44,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                 if(p0!!.isNotEmpty()){
                     HomeActivity.apiHandler.trackSearch(
                         requireContext(),
+                        parentFragmentManager,
                         searchList,
                         1,
                         5,
@@ -52,7 +53,12 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                     return true
                 }
                 else{
-                    searchList.adapter = SearchAdapter(requireContext(), listOf<Track>())
+                    searchList.adapter =
+                        SearchAdapter(
+                            requireContext(),
+                            parentFragmentManager,
+                            listOf<Track>()
+                        )
                     return true
                 }
                 return false

@@ -40,3 +40,63 @@ data class Image(
 )
 class TrackSearchAttr
 // endregion
+
+// region Track Info Response
+data class TrackInfoResponse(
+    val track: TrackInfo
+)
+
+data class TrackInfo(
+    val name: String,
+    val mbid: String,
+    val url: String,
+    val duration: String,
+    val streamable: Streamable,
+    val listeners: String,
+    val playcount: String,
+    val artist: Artist,
+    val album: Album,
+    val toptags: TopTags,
+    val wiki: Wiki
+)
+
+data class Streamable(
+    val text: String,
+    val fulltrack: String
+)
+
+data class Artist(
+    val name: String,
+    val mbid: String,
+    val url: String
+)
+
+data class Album(
+    val artist: String,
+    val title: String,
+    val mbid: String,
+    val url: String,
+    val image: List<Image>,
+    @SerializedName("@attr")
+    val attr: Attr
+)
+
+data class Attr(
+    val position: String
+)
+
+data class TopTags(
+    val tag: List<Tag>
+)
+
+data class Tag(
+    val name: String,
+    val url: String
+)
+
+data class Wiki(
+    val published: String,
+    val summary: String,
+    val content: String
+)
+// endregion

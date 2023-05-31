@@ -2,6 +2,7 @@ package edu.skku.cs.gptmusic.api
 
 import android.content.Context
 import android.widget.ListView
+import androidx.fragment.app.FragmentManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -53,10 +54,17 @@ class APIHandler {
     }
 
     // request track search to last.fm
-    fun trackSearch(context: Context, listView: ListView, pageNumber: Int, limit: Int, track: String?){
+    fun trackSearch(
+        context: Context,
+        supportFragmentManager: FragmentManager,
+        listView: ListView,
+        pageNumber: Int,
+        limit: Int,
+        track: String?
+    ){
         var trackList = ArrayList<String>(0)
 
-        // get api key
+        // set path
         val path = "/2.0/?method=track.search" +
                 "&track=$track" +
                 "&page=$pageNumber" +
@@ -92,7 +100,7 @@ class APIHandler {
 //                        // println("Name: ${track.name} - Artist: ${track.artist}")
 //                    }
                     CoroutineScope(Dispatchers.Main).launch {
-                        listView.adapter = SearchAdapter(context, tracks)
+                        listView.adapter = SearchAdapter(context, supportFragmentManager, tracks)
                     }
                 }
             }

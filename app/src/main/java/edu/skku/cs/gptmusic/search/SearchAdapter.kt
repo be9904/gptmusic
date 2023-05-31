@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import edu.skku.cs.gptmusic.R
 import edu.skku.cs.gptmusic.api.Track
 import java.text.NumberFormat
 import java.util.Locale
 
-class SearchAdapter(val context: Context, val searchedItems: List<Track>): BaseAdapter() {
+class SearchAdapter(
+    val context: Context,
+    val supportFragmentManager: FragmentManager,
+    val searchedItems: List<Track>
+): BaseAdapter() {
     override fun getCount(): Int {
         return searchedItems.count()
     }
@@ -36,6 +41,24 @@ class SearchAdapter(val context: Context, val searchedItems: List<Track>): BaseA
             .getNumberInstance(Locale.US)
             .format(searchedItems[p0].listeners.toInt())
         textViewListener.text = "$formattedNumber listeners"
+
+        view.setOnClickListener{
+            val fragment = TrackInfoFragment(searchedItems[p0]) // Replace `AnotherFragment` with the desired fragment class
+            val fragmentManager = supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+
+            // Set custom animations for enter and exit transitions
+            transaction.setCustomAnimations(
+                R.anim.enter_from_right, // Enter animation for TrackInfoFragment
+                R.anim.exit_to_left, // Exit animation for SearchFragment
+                R.anim.enter_from_left, // Enter animation for SearchFragment (when coming back)
+                R.anim.exit_to_right // Exit animation for TrackInfoFragment (when coming back)
+            )
+
+            transaction.replace(R.id.flFragment, fragment)
+            transaction.addToBackStack(null) // Add the transaction to the back stack
+            transaction.commit()
+        }
 
         return view
     }

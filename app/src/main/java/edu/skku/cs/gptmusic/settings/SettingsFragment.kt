@@ -69,11 +69,6 @@ class SettingsFragment() : Fragment(R.layout.fragment_settings) {
         val dialogLayout = inflater.inflate(R.layout.dialog_showkey, null)
         val textView = dialogLayout.findViewById<TextView>(R.id.textViewAPIKey)
 
-//        val trackList = mutableListOf<String>()
-//        HomeActivity.apiHandler.trackSearch(1, "Believe", trackList)
-//        for(track in trackList)
-//            println("$track")
-
         with(builder) {
             setTitle("API Key")
             textView.text = User.info.apikey

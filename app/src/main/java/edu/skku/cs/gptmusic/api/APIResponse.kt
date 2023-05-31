@@ -2,6 +2,15 @@ package edu.skku.cs.gptmusic.api
 
 import com.google.gson.annotations.SerializedName
 
+// region Firebase User Info
+data class FirebaseUserResponse(val users: List<UserData>)
+data class FirebaseTrack(
+    val artist: String,
+    val image: String,
+    val track: String
+)
+// endregion
+
 // region Track Search Response
 data class TrackSearchResponse(val results: TrackSearchResults)
 data class TrackSearchResults(

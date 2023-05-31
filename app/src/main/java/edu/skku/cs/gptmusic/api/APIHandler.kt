@@ -34,6 +34,10 @@ class APIHandler {
     fun fetchUserInfo(email: String) {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // change datasnapshot to json string
+//                val raw: Any? = dataSnapshot.getValue(Any::class.java)
+//                val json = Gson().toJson(raw)
+
                 // Get Post object and use the values to update the UI
                 for(childSnapshot in dataSnapshot.children) {
                     val user = childSnapshot.getValue(UserData::class.java)
@@ -53,8 +57,9 @@ class APIHandler {
         userDataRef.addValueEventListener(postListener)
     }
 
+    // write to firebase (add tracks)
     fun addTrack(){
-        
+
     }
 
     // request track search to last.fm
@@ -98,11 +103,6 @@ class APIHandler {
 
                     val tracks = response.results.trackmatches.track
 
-//                    // Access the track information
-//                    for (track in tracks) {
-//                        trackList.add("${track.name} - ${track.artist}")
-//                        // println("Name: ${track.name} - Artist: ${track.artist}")
-//                    }
                     CoroutineScope(Dispatchers.Main).launch {
                         listView.adapter = SearchAdapter(context, supportFragmentManager, tracks)
                     }

@@ -17,6 +17,7 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
+import edu.skku.cs.gptmusic.HomeActivity
 import edu.skku.cs.gptmusic.R
 import edu.skku.cs.gptmusic.api.Track
 import edu.skku.cs.gptmusic.api.TrackInfoResponse
@@ -148,6 +149,17 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
                                 tagLayout.findViewById<TextView>(R.id.tag).text = tag.name
                                 tagsLayout.addView(tagLayout)
                             }
+                        }
+
+                        // set add button
+                        addBtn.setOnClickListener {
+                            // add data to firebase
+//                            val sampleList = mutableListOf<Map<String, String>?>()
+//                            val map = mapOf("track" to "", "artist" to "", "image" to "")
+//                            val map2 = mapOf("track" to "", "artist" to "", "image" to "")
+//                            sampleList.add(map)
+//                            sampleList.add(map2)
+//                            HomeActivity.apiHandler.userDataRef.child("2").child("savedTracks").setValue(sampleList)
                         }
                     }
                 }

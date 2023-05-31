@@ -31,11 +31,14 @@ class HomeActivity : AppCompatActivity() {
             println("login successful, entering home activity")
         }
 
+        // user should not be null
+        apiHandler.fetchUserInfo(user?.email.toString())
+
         // fragments
         val fragment1 = HomeFragment()
         val fragment2 = HomeFragment()
         val fragment3 = HomeFragment()
-        val fragment4 = SettingsFragment(user?.email.toString())
+        val fragment4 = SettingsFragment()
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         bottomNavigationView.setOnItemSelectedListener {

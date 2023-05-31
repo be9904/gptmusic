@@ -16,10 +16,9 @@ import edu.skku.cs.gptmusic.HomeActivity
 import edu.skku.cs.gptmusic.LoginActivity
 import edu.skku.cs.gptmusic.R
 import edu.skku.cs.gptmusic.api.APIHandler
+import edu.skku.cs.gptmusic.api.User
 
-class SettingsFragment(
-    val email: String
-) : Fragment(R.layout.fragment_settings) {
+class SettingsFragment() : Fragment(R.layout.fragment_settings) {
     var settingsFields = ArrayList<SettingsField>(0)
 
     override fun onCreateView(
@@ -31,10 +30,7 @@ class SettingsFragment(
 
         // show user email
         val userEmail = view.findViewById<TextView>(R.id.textViewEmail)
-        userEmail.text = email
-
-        // fetch key
-        HomeActivity.apiHandler.fetchAPIKey(email)
+        userEmail.text = User.info.email
 
         // add settings fields
         settingsFields.clear()
@@ -54,7 +50,7 @@ class SettingsFragment(
             }
 
             if(view.findViewById<TextView>(R.id.textViewField).text.toString() == "Show API Key"){
-                showKeyDialog(email)
+                showKeyDialog(User.info.email)
             }
         }
 
@@ -75,7 +71,7 @@ class SettingsFragment(
 
         with(builder) {
             setTitle("API Key")
-            textView.text = HomeActivity.apiHandler.apikey
+            textView.text = User.info.apikey
             setPositiveButton("OK", null)
             setView(dialogLayout)
             show()

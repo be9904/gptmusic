@@ -15,16 +15,15 @@ class APIHandler {
     // firebase
     val database = Firebase.database
     val userDataRef = database.getReference("userdata")
-    var apikey = ""
 
-    fun fetchAPIKey(email: String) {
+    fun fetchUserInfo(email: String) {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
                 for(childSnapshot in dataSnapshot.children) {
-                    val user = childSnapshot.getValue(User::class.java)
+                    val user = childSnapshot.getValue(UserData::class.java)
                     if(user?.email == email) {
-                        apikey = user.apikey
+                        User.info = user
                         break
                     }
                 }

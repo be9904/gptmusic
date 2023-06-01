@@ -46,8 +46,6 @@ class LoginActivity : AppCompatActivity() {
             val email = editTextUsername.text.toString()
             val password = editTextPassword.text.toString()
 
-            println("email: $email(${email.length}), password: $password(${password.length})")
-
             if(email.isEmpty()){
                 Toast.makeText(applicationContext, "Enter Email", Toast.LENGTH_SHORT).show()
                 progressBar.visibility = View.GONE
@@ -67,7 +65,6 @@ class LoginActivity : AppCompatActivity() {
                         progressBar.visibility = View.GONE
 
                         // Sign in success, update UI with the signed-in user's information
-                        println("signInWithEmail:success")
                         val homeIntent = Intent(this, HomeActivity::class.java).apply{}
                         startActivity(homeIntent)
                         finish()
@@ -75,7 +72,6 @@ class LoginActivity : AppCompatActivity() {
                         progressBar.visibility = View.GONE
 
                         // If sign in fails, display a message to the user.
-                        println("signInWithEmail:failure")
                         Toast.makeText(
                             baseContext,
                             "Authentication failed.",

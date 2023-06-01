@@ -88,6 +88,7 @@ class SettingsFragment() : Fragment(R.layout.fragment_settings) {
             setTitle("New API Key")
             setPositiveButton("OK"){dialog, which ->
                 // send changes to firebase db
+                APIHandler.main.userRef.child("apikey").setValue(editText.text.toString())
                 println("New API Key: ${editText.text}")
             }
             setNegativeButton("Cancel"){dialog, which ->

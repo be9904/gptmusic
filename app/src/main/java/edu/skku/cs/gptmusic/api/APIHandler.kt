@@ -39,11 +39,6 @@ class APIHandler {
     var userRef = database.getReference("userdata")
     var userIndex = -1
 
-    // add new user to database
-    fun registerUser(){
-
-    }
-
     // code snippet(modified) from firebase docs
     // https://firebase.google.com/docs/database/android/read-and-write
     fun initialFetch(email: String) {

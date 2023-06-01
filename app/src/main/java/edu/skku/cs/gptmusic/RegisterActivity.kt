@@ -75,7 +75,6 @@ class RegisterActivity : AppCompatActivity() {
                             )
 
                             // Register success, show toast message
-                            println("createUserWithEmail:success")
                             Toast.makeText(
                                 applicationContext,
                                 "Account Created!",
@@ -97,7 +96,6 @@ class RegisterActivity : AppCompatActivity() {
                         progressBar.visibility = View.GONE
 
                         // If sign in fails, display a message to the user.
-                        println("createUserWithEmail:failure")
                         Toast.makeText(
                             baseContext,
                             "Authentication failed.",

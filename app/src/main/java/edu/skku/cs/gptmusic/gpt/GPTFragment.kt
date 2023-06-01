@@ -16,6 +16,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 
@@ -34,12 +35,12 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
         generateBtn.setOnClickListener {
             val intInput = generateNum.text.toString().toIntOrNull()
             if(intInput != null){
-                val genList = chooseRandomItems(intInput)
+                val genList = chooseRandomItems(5)
                 var songs = ""
                 for(track in genList){
                     songs += "${track.name}-${track.artist}, "
                 }
-                sendChat(songs)
+                sendChat(songs, intInput)
             }
             else if(intInput != null && intInput <= 0)
                 Toast.makeText(
@@ -61,11 +62,14 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
 
     fun chooseRandomItems(n: Int): List<Track> {
         val shuffledList = User.info.savedTracks.shuffled()
-        return shuffledList.take(n)
+        if(User.info.savedTracks.count() < n)
+            return shuffledList.take(User.info.savedTracks.count())
+        else
+            return shuffledList.take(n)
     }
 
 
-    fun sendChat(songs: String){
+    fun sendChat(songs: String, number: Int){
         val gptkey = "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"
         val url = "https://api.openai.com/v1/chat/completions"
         val mediaType = "application/json".toMediaType()
@@ -73,7 +77,7 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
 
         val prompt =
             "I want you to act as a song recommender. " +
-            "I will provide you with a song and you will create a playlist of 30 songs that are " +
+            "I will provide you with a song and you will create a playlist of $number songs that are " +
             "similar to the given song. Do not choose songs that are same name or artist and do " +
             "not give songs that I give you. Do not write any explanations or other words, just " +
             "reply with the name of song and name of artist. Only answer with in this format: " +
@@ -82,17 +86,18 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
             "$songs" +
             "\".  This is a sample answer: \"Radioactive - Imagine Dragons, Sugar - Maroon 5, Adore " +
             "You - Harry Styles, Boy With Luv - BTS ft. Halsey, Pompeii - Bastille, Sign of the " +
-            "Times - Harry Styles, Viva la Vida - Coldplay, Uptown Funk - Mark , onson ft. Bruno " +
-            "Mars, Counting Stars - OneRepublic, Love Yourself - Justin Bieber, " +
-            "Don't Stop Believin' - Journey, \"."
+            "Times - Harry Styles, \"."
+
+        val messages = JSONArray()
+        val systemMessage = JSONObject().put("role", "system").put("content", "I want you to act as a song recommender.")
+        val userMessage = JSONObject().put("role", "user").put("content", prompt)
+        messages.put(systemMessage)
+        messages.put(userMessage)
 
         val requestBody = JSONObject()
-            .put("messages", listOf(
-                JSONObject().put("role", "system").put("content", "I want you to act as a song recommender."),
-                JSONObject().put("role", "user").put("content", prompt),
-            ))
-            .put("model", "text-davinci-001")
-            .put("max_tokens", 4000)
+            .put("messages", messages)
+            .put("model", "gpt-3.5-turbo")
+            .put("max_tokens", 3500)
 
 
         val request = Request.Builder()

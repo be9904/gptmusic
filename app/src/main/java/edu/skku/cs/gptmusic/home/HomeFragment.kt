@@ -40,11 +40,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         else
             msg.visibility = View.GONE
 
-        val adapter = HomeAdapter(
-            requireContext(),
-            parentFragmentManager,
-            User.info.savedTracks.toMutableList().apply { reverse() }.toList()
-        )
-        trackGrid.adapter = adapter
+        if(this.isAdded){
+            val adapter = HomeAdapter(
+                requireContext(),
+                parentFragmentManager,
+                User.info.savedTracks.toMutableList().apply { reverse() }.toList()
+            )
+            trackGrid.adapter = adapter
+        }
     }
 }

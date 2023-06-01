@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import edu.skku.cs.gptmusic.HomeActivity
 import edu.skku.cs.gptmusic.R
 import edu.skku.cs.gptmusic.api.Track
+import edu.skku.cs.gptmusic.api.User
 
 class SearchFragment : Fragment(R.layout.fragment_search){
     override fun onCreateView(
@@ -28,6 +29,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                 searchView.clearFocus()
                 if(p0!!.isNotEmpty())
                 {
+                    HomeActivity.apiHandler.checkAPIKey(requireContext(), User.info.apikey)
                     HomeActivity.apiHandler.trackSearch(
                         requireContext(),
                         parentFragmentManager,

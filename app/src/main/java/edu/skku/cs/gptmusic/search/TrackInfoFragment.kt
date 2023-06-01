@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -94,8 +95,17 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
 
             override fun onResponse(call: Call, response: Response) {
                 response.use{
-                    if(!response.isSuccessful)
+                    if(response.code == 403)
+                        requireActivity().runOnUiThread {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Set a Valid API Key in Settings",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    else if(!response.isSuccessful)
                         throw IOException("Unexpected code $response")
+
                     val jsonString = response.body!!.string()
 
                     val gson = Gson()

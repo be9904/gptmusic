@@ -1,7 +1,10 @@
 package edu.skku.cs.gptmusic.api
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.widget.ListView
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -60,6 +63,42 @@ class APIHandler {
     // write to firebase (add tracks)
     fun addTrack(){
 
+    }
+
+    // check if api key is usable
+    fun checkAPIKey(context: Context, apikey: String){
+        // set path
+        val path = "/2.0/?method=track.search" +
+                "&track=Believe" +
+                "&api_key=$apikey" +
+                "&format=json"
+
+        // issue request to last.fm
+        val req = Request.Builder()
+            .url(host+path)
+            .addHeader("Connection", "close")
+            .build()
+
+        client.newCall(req).enqueue(object: Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.use{
+                    if(response.code == 403){
+                        val handler = Handler(Looper.getMainLooper())
+                        handler.post {
+                            Toast.makeText(
+                                context,
+                                "Please Set a Valid API Key in Settings",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+        })
     }
 
     // request track search to last.fm

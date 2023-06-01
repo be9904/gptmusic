@@ -12,10 +12,6 @@ import edu.skku.cs.gptmusic.search.SearchFragment
 import edu.skku.cs.gptmusic.settings.SettingsFragment
 
 class HomeActivity : AppCompatActivity() {
-    companion object{
-        val apiHandler = APIHandler()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -33,7 +29,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         // user should not be null
-        apiHandler.fetchUserInfo(user?.email.toString())
+        APIHandler.main.initialFetch(user?.email.toString())
 
         // fragments
         val fragment1 = HomeFragment()

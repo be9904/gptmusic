@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import edu.skku.cs.gptmusic.HomeActivity
 import edu.skku.cs.gptmusic.R
+import edu.skku.cs.gptmusic.api.APIHandler
 import edu.skku.cs.gptmusic.api.Track
 import edu.skku.cs.gptmusic.api.User
 
@@ -28,8 +28,8 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                 searchView.clearFocus()
                 if(p0!!.isNotEmpty())
                 {
-                    HomeActivity.apiHandler.checkAPIKey(requireContext(), User.info.apikey)
-                    HomeActivity.apiHandler.trackSearch(
+                    APIHandler.main.checkAPIKey(requireContext(), User.info.apikey)
+                    APIHandler.main.trackSearch(
                         requireContext(),
                         parentFragmentManager,
                         searchList,
@@ -44,7 +44,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 if(p0!!.isNotEmpty()){
-                    HomeActivity.apiHandler.trackSearch(
+                    APIHandler.main.trackSearch(
                         requireContext(),
                         parentFragmentManager,
                         searchList,

@@ -24,6 +24,10 @@ import okhttp3.Response
 import java.io.IOException
 
 class APIHandler {
+    companion object{
+        val main = APIHandler() // super lazy singleton initialization
+    }
+
     // http request client
     val client = OkHttpClient()
     val host = "https://ws.audioscrobbler.com"
@@ -31,38 +35,59 @@ class APIHandler {
     // firebase
     val database = Firebase.database
     val userDataRef = database.getReference("userdata")
+    var userIndex = -1
+    var rawJson = ""
 
-    // code snippet from firebase docs
+    // code snippet(modified) from firebase docs
     // https://firebase.google.com/docs/database/android/read-and-write
-    fun fetchUserInfo(email: String) {
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // change datasnapshot to json string
-//                val raw: Any? = dataSnapshot.getValue(Any::class.java)
-//                val json = Gson().toJson(raw)
+    fun initialFetch(email: String) {
+        // get list of user data
+        userDataRef.get().addOnSuccessListener {
+            println("got userdata: $it")
 
-                // Get Post object and use the values to update the UI
-                for(childSnapshot in dataSnapshot.children) {
-                    val user = childSnapshot.getValue(UserData::class.java)
+            // get user info from datasnapshot list
+            var index = 0
+            for(childSnapshot in it.children) {
+                val user = childSnapshot.getValue(UserData::class.java)
+                // update user info
+                if(user?.email == email) {
+                    User.info = user
+                    userIndex = index
+                    break
+                }
+                index++
+            }
+
+            // create listener for corresponding user index
+            val postListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    println("fetched user $userIndex data update")
+                    val user = dataSnapshot.getValue(UserData::class.java)
                     // update user info
-                    if(user?.email == email) {
+                    if (user != null) {
                         User.info = user
-                        break
                     }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Getting Post failed, log a message
+                    println("loadPost:onCancelled,  ${databaseError.toException()}")
                 }
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                println("loadPost:onCancelled,  ${databaseError.toException()}")
-            }
+            // add listener
+            userDataRef.child(userIndex.toString()).addValueEventListener(postListener)
+        }.addOnFailureListener {
+            it.printStackTrace()
         }
-        userDataRef.addValueEventListener(postListener)
     }
 
     // write to firebase (add tracks)
-    fun addTrack(){
+    fun addTrack(track: Track){
+        // modify track
+        val trackList = ArrayList<Track>(User.info.savedTracks)
+        trackList.add(track)
 
+        // write to firebase
     }
 
     // check if api key is usable

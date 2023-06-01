@@ -43,10 +43,14 @@ class HomeAdapter(
         if(trackList?.get(p0)?.image?.get(
                 trackList?.get(p0)?.image?.count()!! - 1
             )?.text != null){
-            Glide.with(context)
-                .load(trackList[p0]
-                    .image[trackList[p0].image.count() - 1].text)
-                .into(albumImage)
+            if(trackList?.get(p0)?.image?.get(
+                    trackList?.get(p0)?.image?.count()!! - 1
+                )?.text != ""){
+                Glide.with(context)
+                    .load(trackList[p0]
+                        .image[trackList[p0].image.count() - 1].text)
+                    .into(albumImage)
+            }
         }
 
         // set track info

@@ -108,9 +108,7 @@ class APIHandler {
             }
         }
         trackList.add(newTrack)
-
-        // write to firebase
-        userRef.child("savedTracks").setValue(trackList)
+        updateImageURL(trackList)
 
         // show toast message
         handler.post {
@@ -154,6 +152,62 @@ class APIHandler {
                         }
                     }
                 }
+            }
+        })
+    }
+
+    // get album image url
+    fun updateImageURL(trackList: ArrayList<Track>){
+        val newTrack = trackList.last()
+        val trackImages = newTrack.image.toMutableList()
+
+        // set path
+        val path = "/2.0/?method=track.getInfo" +
+                "&api_key=${User.info.apikey}" +
+                "&artist=${newTrack.artist}" +
+                "&track=${newTrack.name}" +
+                "&format=json"
+
+        // issue request to last.fm
+        val req = Request.Builder()
+            .url(host+path)
+            .addHeader("Connection", "close")
+            .build()
+
+        client.newCall(req).enqueue(object: Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                if(!response.isSuccessful)
+                    throw IOException("Unexpected code $response")
+
+                val jsonString = response.body!!.string()
+
+                val gson = Gson()
+                val response = gson.fromJson(jsonString, TrackInfoResponse::class.java)
+                val imageUrl = response?.track?.album?.image?.get(
+                    response?.track?.album?.image?.count()!!-1
+                )?.text ?: ""
+                println(imageUrl)
+
+                for(i in trackImages.indices){
+                    trackImages[i] = Image(imageUrl, "extralarge")
+                }
+
+                trackList[trackList.count()-1] =
+                    Track(
+                        newTrack.name,
+                        newTrack.artist,
+                        newTrack.url,
+                        newTrack.streamable,
+                        newTrack.listeners,
+                        trackImages,
+                        newTrack.mbid
+                    )
+
+                // write to firebase
+                userRef.child("savedTracks").setValue(trackList)
             }
         })
     }

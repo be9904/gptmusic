@@ -116,9 +116,13 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
 
                     CoroutineScope(Dispatchers.Main).launch {
                         // set image
-                        if(response.track?.album?.image?.get(3)?.text != null){
+                        if(response.track?.album?.image?.get(
+                                response.track?.album?.image?.count()!! - 1
+                        )?.text != null){
                             Glide.with(requireContext())
-                                .load(response.track.album.image[3].text)
+                                .load(response.track.album.image[
+                                        response.track.album.image.count() - 1
+                                ].text)
                                 .into(trackImage)
                         }
 

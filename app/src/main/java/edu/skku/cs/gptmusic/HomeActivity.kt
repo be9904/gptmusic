@@ -33,7 +33,7 @@ class HomeActivity : AppCompatActivity() {
 
         // fragments
         val fragment1 = HomeFragment()
-        val fragment2 = HomeFragment()
+        val fragment2 = SearchFragment()
         val fragment3 = SearchFragment()
         val fragment4 = SettingsFragment()
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)

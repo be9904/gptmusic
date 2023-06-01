@@ -10,7 +10,9 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import edu.skku.cs.gptmusic.api.UserData
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -32,6 +34,7 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         val mAuth = FirebaseAuth.getInstance()
+        val userDataRef = Firebase.database.getReference("userdata")
 
         val editTextUsername = findViewById<EditText>(R.id.editTextUsername)
         val editTextPassword = findViewById<EditText>(R.id.editTextPassword)
@@ -56,16 +59,40 @@ class RegisterActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         progressBar.visibility = View.GONE
 
-                        // Sign in success, update UI with the signed-in user's information
-                        println("createUserWithEmail:success")
-                        Toast.makeText(
-                            applicationContext,
-                            "Account Created!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        val homeIntent = Intent(this, HomeActivity::class.java).apply{}
-                        startActivity(homeIntent)
-                        finish()
+                        // add user to db
+                        userDataRef.get().addOnSuccessListener {
+                            // add new user info
+                            val childCount = it.childrenCount
+                            userDataRef.child(childCount.toString()).setValue(
+                                UserData(
+                                    it.child("0")
+                                        .getValue(UserData::class.java)
+                                        ?.apikey ?: "",
+                                    email,
+                                    mAuth.uid.toString(),
+                                    listOf()
+                                )
+                            )
+
+                            // Register success, show toast message
+                            println("createUserWithEmail:success")
+                            Toast.makeText(
+                                applicationContext,
+                                "Account Created!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            // start home activity
+                            val homeIntent = Intent(this, HomeActivity::class.java).apply{}
+                            startActivity(homeIntent)
+                            finish()
+                        }.addOnFailureListener{
+                            Toast.makeText(
+                                applicationContext,
+                                "Failed to Register",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
                         progressBar.visibility = View.GONE
 

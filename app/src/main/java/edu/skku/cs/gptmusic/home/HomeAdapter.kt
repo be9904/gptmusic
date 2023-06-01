@@ -9,7 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
+import edu.skku.cs.gptmusic.HomeActivity
 import edu.skku.cs.gptmusic.R
+import edu.skku.cs.gptmusic.api.APIHandler
 import edu.skku.cs.gptmusic.api.Track
 import edu.skku.cs.gptmusic.search.TrackInfoFragment
 import java.text.NumberFormat
@@ -41,6 +43,7 @@ class HomeAdapter(
         val trackTitle = view.findViewById<TextView>(R.id.trackTitle)
         val artistName = view.findViewById<TextView>(R.id.artistName)
         val listenerCnt = view.findViewById<TextView>(R.id.listenerCnt)
+        val deleteImage = view.findViewById<ImageView>(R.id.deleteImage)
 
         // set image
         if(trackList?.get(p0)?.image?.get(
@@ -67,6 +70,10 @@ class HomeAdapter(
         }
         else
             listenerCnt.text = ""
+
+        deleteImage.setOnClickListener{
+            APIHandler.main.removeTrack(context, trackList[p0])
+        }
 
         view.setOnClickListener{
             val fragment = TrackInfoFragment(trackList[p0]) // Replace `AnotherFragment` with the desired fragment class

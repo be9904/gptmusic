@@ -6,6 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/emptyMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Library is empty.\nUse the search tab to add songs."
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:typeface="serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <GridView
         android:id="@+id/trackGrid"
         android:layout_width="match_parent"
@@ -18,6 +32,10 @@
         android:verticalSpacing="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </GridView>
+</androidx.constraintlayout.widget.ConstraintLayout>

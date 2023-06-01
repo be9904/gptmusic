@@ -35,9 +35,6 @@ class HomeActivity : AppCompatActivity() {
             println("login successful, entering home activity")
         }
 
-        // user should not be null
-        APIHandler.main.initialFetch(user?.email.toString())
-
         // fragments
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
@@ -53,6 +50,9 @@ class HomeActivity : AppCompatActivity() {
             }
             true
         }
+
+        // user should not be null
+        APIHandler.main.initialFetch(user?.email.toString())
     }
 
     fun setFragment(fragment: Fragment)=

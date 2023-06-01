@@ -65,6 +65,9 @@ class APIHandler {
                     if (user != null) {
                         User.info = user
                     }
+                    if(HomeActivity.fragment1.isAdded){
+                        HomeActivity.fragment1.updateUI()
+                    }
                 }
                 override fun onCancelled(databaseError: DatabaseError) {
                     // Getting Post failed, log a message
@@ -88,7 +91,7 @@ class APIHandler {
         }
     }
 
-    // write to firebase (add tracks)
+    // write to firebase (add track)
     fun addTrack(context: Context, newTrack: Track){
         // handler for toast
         val handler = Handler(Looper.getMainLooper())
@@ -116,6 +119,41 @@ class APIHandler {
             Toast.makeText(
                 context,
                 "Added Track to List",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    // write to firebase (remove track)
+    fun removeTrack(context: Context, trackToRemove: Track){
+        // handler for toast
+        val handler = Handler(Looper.getMainLooper())
+
+        // remove selected track
+        val trackList = ArrayList<Track>(User.info.savedTracks)
+        for(track in trackList){
+            if(track.name == trackToRemove.name
+                && track.artist == trackToRemove.artist) {
+                trackList.remove(trackToRemove)
+                userRef.child("savedTracks").setValue(trackList)
+
+                // show toast message
+                handler.post {
+                    Toast.makeText(
+                        context,
+                        "Removed Track from List",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                return
+            }
+        }
+
+        // show toast message
+        handler.post {
+            Toast.makeText(
+                context,
+                "Failed to remove track from List",
                 Toast.LENGTH_SHORT
             ).show()
         }

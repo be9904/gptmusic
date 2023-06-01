@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import edu.skku.cs.gptmusic.R
 import edu.skku.cs.gptmusic.api.Track
+import edu.skku.cs.gptmusic.search.TrackInfoFragment
 import java.text.NumberFormat
 import java.util.Locale
 
 class HomeAdapter(
     val context: Context,
+    val supportFragmentManager: FragmentManager,
     val trackList: List<Track>
 ): BaseAdapter() {
     override fun getCount(): Int {
@@ -64,6 +67,24 @@ class HomeAdapter(
         }
         else
             listenerCnt.text = ""
+
+        view.setOnClickListener{
+            val fragment = TrackInfoFragment(trackList[p0]) // Replace `AnotherFragment` with the desired fragment class
+            val fragmentManager = supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+
+            // Set custom animations for enter and exit transitions
+            transaction.setCustomAnimations(
+                R.anim.enter_from_right, // Enter animation for TrackInfoFragment
+                R.anim.exit_to_left, // Exit animation for SearchFragment
+                R.anim.enter_from_left, // Enter animation for SearchFragment (when coming back)
+                R.anim.exit_to_right // Exit animation for TrackInfoFragment (when coming back)
+            )
+
+            transaction.replace(R.id.flFragment, fragment)
+            transaction.addToBackStack(null) // Add the transaction to the back stack
+            transaction.commit()
+        }
 
         return view
     }

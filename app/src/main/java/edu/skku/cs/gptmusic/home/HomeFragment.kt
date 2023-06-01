@@ -26,6 +26,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         trackGrid.adapter =
             HomeAdapter(
                 requireContext(),
+                parentFragmentManager,
                 User.info.savedTracks.toMutableList().apply { reverse() }.toList()
             )
 

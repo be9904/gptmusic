@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
@@ -38,6 +39,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo) {
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -117,9 +119,6 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
                             Glide.with(requireContext())
                                 .load(response.track.album.image[3].text)
                                 .into(trackImage)
-                        }
-                        else{
-                            println("no album image")
                         }
 
                         // set info

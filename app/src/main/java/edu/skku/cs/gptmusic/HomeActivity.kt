@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import edu.skku.cs.gptmusic.api.APIHandler
+import edu.skku.cs.gptmusic.gpt.GPTFragment
 import edu.skku.cs.gptmusic.home.HomeFragment
 import edu.skku.cs.gptmusic.search.SearchFragment
 import edu.skku.cs.gptmusic.settings.SettingsFragment
@@ -14,7 +15,7 @@ import edu.skku.cs.gptmusic.settings.SettingsFragment
 class HomeActivity : AppCompatActivity() {
     companion object{
         val fragment1 = HomeFragment()
-        val fragment2 = SearchFragment()
+        val fragment2 = GPTFragment()
         val fragment3 = SearchFragment()
         val fragment4 = SettingsFragment()
     }

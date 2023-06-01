@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import edu.skku.cs.gptmusic.HomeActivity
 import edu.skku.cs.gptmusic.search.SearchAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,8 +49,6 @@ class APIHandler {
     fun initialFetch(email: String) {
         // get list of user data
         userDataRef.get().addOnSuccessListener {
-            println("got userdata: $it")
-
             // get user info from datasnapshot list
             var index = 0
             for(childSnapshot in it.children) {
@@ -66,7 +65,6 @@ class APIHandler {
             // create listener for corresponding user index
             val userListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    println("fetched user $userIndex data update")
                     val user = dataSnapshot.getValue(UserData::class.java)
                     // update user info
                     if (user != null) {
@@ -82,6 +80,14 @@ class APIHandler {
             // add listener
             userRef = userDataRef.child(userIndex.toString())
             userRef.addValueEventListener(userListener)
+
+            // fetch current user data for the first time
+            userRef.get().addOnSuccessListener {
+                val data = it.getValue(UserData::class.java)
+                if(data != null)
+                    User.info = data
+                HomeActivity.fragment1.updateUI()
+            }
         }.addOnFailureListener {
             it.printStackTrace()
         }

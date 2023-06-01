@@ -12,6 +12,13 @@ import edu.skku.cs.gptmusic.search.SearchFragment
 import edu.skku.cs.gptmusic.settings.SettingsFragment
 
 class HomeActivity : AppCompatActivity() {
+    companion object{
+        val fragment1 = HomeFragment()
+        val fragment2 = SearchFragment()
+        val fragment3 = SearchFragment()
+        val fragment4 = SettingsFragment()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -32,11 +39,10 @@ class HomeActivity : AppCompatActivity() {
         APIHandler.main.initialFetch(user?.email.toString())
 
         // fragments
-        val fragment1 = HomeFragment()
-        val fragment2 = SearchFragment()
-        val fragment3 = SearchFragment()
-        val fragment4 = SettingsFragment()
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        bottomNavigationView.selectedItemId = R.id.home
+        setFragment(fragment1)
 
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){

@@ -10,6 +10,7 @@ import edu.skku.cs.gptmusic.R
 import edu.skku.cs.gptmusic.api.User
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
+    lateinit var trackGrid: GridView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -17,19 +18,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, null)
 
-        val trackGrid = view.findViewById<GridView>(R.id.trackGrid)
+        trackGrid = view.findViewById<GridView>(R.id.trackGrid)
 
         val screenWidthDp = resources.displayMetrics.widthPixels / resources.displayMetrics.density
         val numCardsInRow = ((screenWidthDp - 30) / 150).toInt()
 
         trackGrid.numColumns = numCardsInRow
+        updateUI()
+
+        return view
+    }
+
+    fun updateUI(){
         trackGrid.adapter =
             HomeAdapter(
                 requireContext(),
                 parentFragmentManager,
                 User.info.savedTracks.toMutableList().apply { reverse() }.toList()
             )
-
-        return view
     }
 }

@@ -35,6 +35,7 @@ class APIHandler {
     // firebase
     val database = Firebase.database
     val userDataRef = database.getReference("userdata")
+    var userRef = database.getReference("userdata")
     var userIndex = -1
     var rawJson = ""
 
@@ -59,7 +60,7 @@ class APIHandler {
             }
 
             // create listener for corresponding user index
-            val postListener = object : ValueEventListener {
+            val userListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     println("fetched user $userIndex data update")
                     val user = dataSnapshot.getValue(UserData::class.java)
@@ -75,7 +76,8 @@ class APIHandler {
             }
 
             // add listener
-            userDataRef.child(userIndex.toString()).addValueEventListener(postListener)
+            userRef = userDataRef.child(userIndex.toString())
+            userRef.addValueEventListener(userListener)
         }.addOnFailureListener {
             it.printStackTrace()
         }
@@ -88,6 +90,7 @@ class APIHandler {
         trackList.add(track)
 
         // write to firebase
+        userRef.child("savedTracks").setValue(trackList)
     }
 
     // check if api key is usable

@@ -29,18 +29,18 @@ data class TrackSearchQuery(
 )
 data class TrackMatches(val track: List<Track>)
 data class Track(
-    val name: String,
-    val artist: String,
-    val url: String,
-    val streamable: String,
-    val listeners: String,
-    val image: List<Image>,
-    val mbid: String
+    val name: String = "",
+    val artist: String = "",
+    val url: String = "",
+    val streamable: String = "",
+    val listeners: String = "",
+    val image: List<Image> = listOf(),
+    val mbid: String = ""
 )
 data class Image(
     @SerializedName("#text")
-    val text: String,
-    val size: String
+    val text: String = "",
+    val size: String = ""
 )
 class TrackSearchAttr
 // endregion

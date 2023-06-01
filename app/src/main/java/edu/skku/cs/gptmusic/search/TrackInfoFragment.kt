@@ -164,13 +164,7 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
                         // set add button
                         addBtn.setOnClickListener {
                             // add data to firebase
-                            APIHandler.main.addTrack(track)
-//                            val sampleList = mutableListOf<Map<String, String>?>()
-//                            val map = mapOf("track" to "", "artist" to "", "image" to "")
-//                            val map2 = mapOf("track" to "", "artist" to "", "image" to "")
-//                            sampleList.add(map)
-//                            sampleList.add(map2)
-//                            HomeActivity.apiHandler.userDataRef.child("2").child("savedTracks").setValue(sampleList)
+                            APIHandler.main.addTrack(requireContext(), track)
                         }
                     }
                 }

@@ -37,7 +37,11 @@ class APIHandler {
     val userDataRef = database.getReference("userdata")
     var userRef = database.getReference("userdata")
     var userIndex = -1
-    var rawJson = ""
+
+    // add new user to database
+    fun registerUser(){
+
+    }
 
     // code snippet(modified) from firebase docs
     // https://firebase.google.com/docs/database/android/read-and-write
@@ -84,13 +88,38 @@ class APIHandler {
     }
 
     // write to firebase (add tracks)
-    fun addTrack(track: Track){
-        // modify track
+    fun addTrack(context: Context, newTrack: Track){
+        // handler for toast
+        val handler = Handler(Looper.getMainLooper())
+
+        // add selected track
         val trackList = ArrayList<Track>(User.info.savedTracks)
-        trackList.add(track)
+        for(track in trackList){
+            if(track.name == newTrack.name
+                && track.artist == newTrack.artist) {
+                handler.post{
+                    Toast.makeText(
+                        context,
+                        "Track already exists",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                return
+            }
+        }
+        trackList.add(newTrack)
 
         // write to firebase
         userRef.child("savedTracks").setValue(trackList)
+
+        // show toast message
+        handler.post {
+            Toast.makeText(
+                context,
+                "Added Track to List",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     // check if api key is usable

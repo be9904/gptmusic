@@ -13,6 +13,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import edu.skku.cs.gptmusic.HomeActivity
+import edu.skku.cs.gptmusic.gpt.GPTFragment
 import edu.skku.cs.gptmusic.search.SearchAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -260,8 +261,6 @@ class APIHandler {
         limit: Int,
         track: String?
     ){
-        var trackList = ArrayList<String>(0)
-
         // set path
         val path = "/2.0/?method=track.search" +
                 "&track=$track" +
@@ -294,6 +293,55 @@ class APIHandler {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         listView.adapter = SearchAdapter(context, supportFragmentManager, tracks)
+                    }
+                }
+            }
+        })
+    }
+
+    // request track search to last.fm
+    fun getTrack(
+        context: Context,
+        supportFragmentManager: FragmentManager,
+        listView: ListView,
+        pageNumber: Int,
+        limit: Int,
+        track: String?
+    ){
+        var trackList = ArrayList<String>(0)
+
+        // set path
+        val path = "/2.0/?method=track.search" +
+                "&track=$track" +
+                "&page=$pageNumber" +
+                "&limit=$limit" +
+                "&api_key=${User.info.apikey}" +
+                "&format=json"
+
+        // issue request to last.fm
+        val req = Request.Builder()
+            .url(host+path)
+            .addHeader("Connection", "close")
+            .build()
+
+        client.newCall(req).enqueue(object: Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.use{
+                    if(!response.isSuccessful)
+                        throw IOException("Unexpected code $response")
+                    val jsonString = response.body!!.string()
+
+                    val gson = Gson()
+                    val response = gson.fromJson(jsonString, TrackSearchResponse::class.java)
+
+                    if(response.results.trackmatches.track.isNotEmpty())
+                        HomeActivity.fragment2.recList.add(response.results.trackmatches.track.first())
+                    CoroutineScope(Dispatchers.Main).launch {
+                        HomeActivity.fragment2.updateUI()
                     }
                 }
             }

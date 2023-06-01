@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
 import edu.skku.cs.gptmusic.R
+import edu.skku.cs.gptmusic.api.APIHandler
+import edu.skku.cs.gptmusic.api.ChatCompletionResponse
 import edu.skku.cs.gptmusic.api.Track
 import edu.skku.cs.gptmusic.api.User
 import okhttp3.MediaType.Companion.toMediaType
@@ -21,6 +25,10 @@ import org.json.JSONObject
 import java.io.IOException
 
 class GPTFragment: Fragment(R.layout.fragment_gpt)  {
+    lateinit var searchList: ListView
+    lateinit var progressBar: ProgressBar
+    var recList: ArrayList<Track> = ArrayList<Track>(0)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,9 +38,15 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
 
         val generateNum = view.findViewById<EditText>(R.id.generateNum)
         val generateBtn = view.findViewById<Button>(R.id.generateBtn)
-        val searchList = view.findViewById<ListView>(R.id.searchList)
+        searchList = view.findViewById(R.id.searchList)
+        progressBar = view.findViewById(R.id.progressBarGPT)
 
         generateBtn.setOnClickListener {
+            generateNum.clearFocus()
+            progressBar.visibility = View.VISIBLE
+            recList.clear()
+            updateUI()
+
             val intInput = generateNum.text.toString().toIntOrNull()
             if(intInput != null){
                 val genList = chooseRandomItems(5)
@@ -55,7 +69,6 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
                     Toast.LENGTH_SHORT
                 ).show()
         }
-
 
         return view
     }
@@ -114,8 +127,49 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
 
             override fun onResponse(call: Call, response: Response) {
                 val responseBody = response.body?.string()
-                println(responseBody)
+                if(responseBody != null){
+                    parseRequest(responseBody)
+                }
             }
         })
+    }
+
+    fun parseRequest(response: String){
+        val gson = Gson()
+        val response = gson.fromJson(response, ChatCompletionResponse::class.java)
+
+        val pairs = response.choices[0].message.content.split(",").map { it.trim() }
+        val parsedSongs = pairs.map { it.split("-").map { it.trim() } }
+
+        // Print the parsed songs
+        for (song in parsedSongs) {
+            APIHandler.main.getTrack(
+                requireContext(),
+                parentFragmentManager,
+                searchList,
+                1,
+                5,
+                song[0]
+            )
+        }
+    }
+
+    fun updateUI(){
+        if(recList.isNotEmpty())
+            progressBar.visibility = View.GONE
+
+        if(this.isAdded){
+            val adapter = GPTAdapter(
+                requireContext(),
+                parentFragmentManager,
+                recList
+            )
+            searchList.adapter = adapter
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateUI()
     }
 }

@@ -36,36 +36,27 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_gpt, null)
 
-        val generateNum = view.findViewById<EditText>(R.id.generateNum)
         val generateBtn = view.findViewById<Button>(R.id.generateBtn)
         searchList = view.findViewById(R.id.searchList)
         progressBar = view.findViewById(R.id.progressBarGPT)
 
         generateBtn.setOnClickListener {
-            generateNum.clearFocus()
             progressBar.visibility = View.VISIBLE
             recList.clear()
             updateUI()
 
-            val intInput = generateNum.text.toString().toIntOrNull()
-            if(intInput != null){
-                val genList = chooseRandomItems(5)
+            if(User.info.savedTracks.isNotEmpty()){
+                val genList = chooseRandomItems(7)
                 var songs = ""
                 for(track in genList){
                     songs += "${track.name}-${track.artist}, "
                 }
-                sendChat(songs, intInput)
+                sendChat(songs)
             }
-            else if(intInput != null && intInput <= 0)
-                Toast.makeText(
-                    requireContext(),
-                    "Your library is empty!",
-                    Toast.LENGTH_SHORT
-                ).show()
             else
                 Toast.makeText(
                     requireContext(),
-                    "Enter valid a number",
+                    "Your library is empty!",
                     Toast.LENGTH_SHORT
                 ).show()
         }
@@ -82,7 +73,7 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
     }
 
 
-    fun sendChat(songs: String, number: Int){
+    fun sendChat(songs: String){
         val gptkey = "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"
         val url = "https://api.openai.com/v1/chat/completions"
         val mediaType = "application/json".toMediaType()
@@ -90,7 +81,7 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
 
         val prompt =
             "I want you to act as a song recommender. " +
-            "I will provide you with a song and you will create a playlist of $number songs that are " +
+            "I will provide you with a song and you will create a playlist of 10 songs that are " +
             "similar to the given song. Do not choose songs that are same name or artist and do " +
             "not give songs that I give you. Do not write any explanations or other words, just " +
             "reply with the name of song and name of artist. Only answer with in this format: " +

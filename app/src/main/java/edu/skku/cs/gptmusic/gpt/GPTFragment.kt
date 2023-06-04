@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
@@ -16,6 +17,9 @@ import edu.skku.cs.gptmusic.api.APIHandler
 import edu.skku.cs.gptmusic.api.ChatCompletionResponse
 import edu.skku.cs.gptmusic.api.Track
 import edu.skku.cs.gptmusic.api.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.*
@@ -23,10 +27,13 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+import java.net.SocketTimeoutException
+import java.util.concurrent.TimeUnit
 
 class GPTFragment: Fragment(R.layout.fragment_gpt)  {
     lateinit var searchList: ListView
     lateinit var progressBar: ProgressBar
+    lateinit var timeoutMsg: TextView
     var recList: ArrayList<Track> = ArrayList<Track>(0)
 
     override fun onCreateView(
@@ -39,9 +46,12 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
         val generateBtn = view.findViewById<Button>(R.id.generateBtn)
         searchList = view.findViewById(R.id.searchList)
         progressBar = view.findViewById(R.id.progressBarGPT)
+        timeoutMsg = view.findViewById(R.id.timeoutMsg)
 
         generateBtn.setOnClickListener {
             progressBar.visibility = View.VISIBLE
+            searchList.visibility = View.VISIBLE
+            timeoutMsg.visibility = View.GONE
             recList.clear()
             updateUI()
 
@@ -77,7 +87,10 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
         val gptkey = "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"
         val url = "https://api.openai.com/v1/chat/completions"
         val mediaType = "application/json".toMediaType()
-        val client = OkHttpClient()
+        val client = OkHttpClient.Builder()
+            .readTimeout(10, TimeUnit.SECONDS) // Read timeout
+            .writeTimeout(10, TimeUnit.SECONDS) // Write timeout
+            .build()
 
         val prompt =
             "I want you to act as a song recommender. " +
@@ -113,6 +126,13 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
+                if(e is SocketTimeoutException){
+                    CoroutineScope(Dispatchers.Main).launch {
+                        searchList.visibility = View.GONE
+                        progressBar.visibility = View.GONE
+                        timeoutMsg.visibility = View.VISIBLE
+                    }
+                }
                 e.printStackTrace()
             }
 

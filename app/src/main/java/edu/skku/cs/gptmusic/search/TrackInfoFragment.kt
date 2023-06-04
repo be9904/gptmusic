@@ -66,7 +66,7 @@ class TrackInfoFragment(val track: Track): Fragment(R.layout.fragment_trackinfo)
             // Extract the link from the html
             val pattern = "data-youtube-url=\"(.*?)\"".toRegex()
             val matchResult = pattern.find(doc.toString())
-            val youtubeLink = matchResult?.groupValues?.get(1)
+            val youtubeLink = matchResult?.groupValues?.get(1) ?: ""
             playBtn.setOnClickListener{
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink))
                 val chooser = Intent.createChooser(intent, "Open with")

@@ -301,15 +301,10 @@ class APIHandler {
 
     // request track search to last.fm
     fun getTrack(
-        context: Context,
-        supportFragmentManager: FragmentManager,
-        listView: ListView,
         pageNumber: Int,
         limit: Int,
         track: String?
     ){
-        var trackList = ArrayList<String>(0)
-
         // set path
         val path = "/2.0/?method=track.search" +
                 "&track=$track" +
@@ -338,7 +333,7 @@ class APIHandler {
                     val gson = Gson()
                     val response = gson.fromJson(jsonString, TrackSearchResponse::class.java)
 
-                    if(response.results.trackmatches.track.isNotEmpty())
+                    if(response.results?.trackmatches?.track?.isNotEmpty() == true)
                         HomeActivity.fragment2.recList.add(response.results.trackmatches.track.first())
                     CoroutineScope(Dispatchers.Main).launch {
                         HomeActivity.fragment2.updateUI()

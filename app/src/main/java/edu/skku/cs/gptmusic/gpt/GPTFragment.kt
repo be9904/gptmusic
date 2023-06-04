@@ -141,12 +141,9 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
         val pairs = response.choices[0].message.content.split(",").map { it.trim() }
         val parsedSongs = pairs.map { it.split("-").map { it.trim() } }
 
-        // Print the parsed songs
+        // add song to recList
         for (song in parsedSongs) {
             APIHandler.main.getTrack(
-                requireContext(),
-                parentFragmentManager,
-                searchList,
                 1,
                 5,
                 song[0]

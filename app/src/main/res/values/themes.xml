@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.GPTMusic" parent="Base.Theme.GPTMusic" />
+
+    <style name="GPTProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/progressbar_gpt</item>
+    </style>
+
 </resources>

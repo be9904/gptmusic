@@ -84,7 +84,7 @@ class GPTFragment: Fragment(R.layout.fragment_gpt)  {
 
 
     fun sendChat(songs: String){
-        val gptkey = "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"
+        val gptkey = "GPT API Key"
         val url = "https://api.openai.com/v1/chat/completions"
         val mediaType = "application/json".toMediaType()
         val client = OkHttpClient.Builder()
